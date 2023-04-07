@@ -4,12 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ClientHandler extends Thread {
-    private Socket socket;
-    private ChatServer chatServer;
-    private BufferedReader reader;
-    private PrintWriter writer;
-    private String username;
-
+    private Socket socket; // Le socket de communication avec le client
+    private ChatServer chatServer; // Le serveur de chat auquel le client est connecté
+    private BufferedReader reader; // Le lecteur pour lire les messages du client
+    private PrintWriter writer; // envoyer des messages au client
+    private String username; // Le nom d'utilisateur du client
     public ClientHandler(Socket socket, ChatServer chatServer) throws IOException {
         this.socket = socket;
         this.chatServer = chatServer;
@@ -24,23 +23,23 @@ public class ClientHandler extends Thread {
     @Override
     public void run() {
         try {
-            // Read username from client
+            // Lire le nom d'utilisateur du client
             username = reader.readLine();
-            System.out.println("Client connected with username: " + username);
+            System.out.println("Client connecté avec le nom d'utilisateur : " + username);
             chatServer.logIncomingConnection(socket, username);
 
-            // Send welcome message to client
-            writer.println("Welcome to the chat room, " + username + "!");
+            // Envoyer un message de bienvenue au client
+            writer.println("Bienvenue dans la salle de discussion, " + username + "!");
 
             String message;
             while ((message = reader.readLine()) != null) {
-                // Broadcast message to all clients
+                // Diffuser le message à tous les clients
                 chatServer.broadcast(username + ": " + message, this);
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            // Remove client from chat server's client list and close resources
+            // Retirer le client de la liste des clients du serveur de chat et fermer les ressources
             chatServer.removeClient(this);
             try {
                 reader.close();
