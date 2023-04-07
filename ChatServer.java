@@ -48,6 +48,10 @@ public class ChatServer {
         for (ClientHandler client : clients) {
             if (client != sender) {
                 client.sendMessage(message);
+            } else {
+                // Send the message to the sender with their username
+                String senderMessage = "You: " + message;
+                client.sendMessage(senderMessage);
             }
         }
     }

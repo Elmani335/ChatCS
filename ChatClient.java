@@ -82,7 +82,7 @@ public class ChatClient {
     }
 
     public static void main(String[] args) {
-        String serverHost = "192.168.1.140";
+        String serverHost = "localhost";
         int serverPort = 5555;
 
         ChatClient chatClient = new ChatClient(serverHost, serverPort);
